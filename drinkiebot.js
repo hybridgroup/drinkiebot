@@ -4,6 +4,9 @@ Cylon.api("http", {host: "0.0.0.0", ssl: false});
 
 Cylon.robot({
   name: "drinkiebot",
+
+  events: ['making_drink', 'cleaning_mode'],
+
   connections: {
     edison: { adaptor: 'intel-iot' }
   },
@@ -27,6 +30,7 @@ Cylon.robot({
   },
 
   makeGinTonic: function() {
+    this.emit('making_drink', { data: 'gin-tonic'});
     this.leds.setRGB("00ffff");
     this.writeToScreen("Gin + Tonic     ");
     this.shot('gin');
@@ -35,6 +39,7 @@ Cylon.robot({
   },
 
   makeVodkaTonic: function() {
+    this.emit('making_drink', { data: 'vodka-tonic'});
     this.leds.setRGB("ff8000");
     this.writeToScreen("Vodka + Tonic   ");
     this.shot('vodka');
@@ -43,6 +48,7 @@ Cylon.robot({
   },
 
   makeMoscowMule: function() {
+    this.emit('making_drink', { data: 'moscow-mule'});
     this.leds.setRGB("ff0000");
     this.writeToScreen("Moscow Mule     ");
     this.shot('vodka');
@@ -51,6 +57,7 @@ Cylon.robot({
   },
 
   makeGinBuck: function() {
+    this.emit('making_drink', { data: 'gin-buck'});
     this.leds.setRGB("00ff00");
     this.writeToScreen("Gin Buck        ");
     this.shot('gin');
@@ -59,6 +66,7 @@ Cylon.robot({
   },
 
   makeGingerAle: function() {
+    this.emit('making_drink', { data: 'ginger-ale'});
     this.leds.setRGB("00cc00");
     this.writeToScreen("Ginger Ale      ");
     this.mixer('ginger');
