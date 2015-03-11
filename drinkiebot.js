@@ -1,24 +1,34 @@
 var Cylon = require('cylon');
 
+var config = require("./config.json");
+
 Cylon.api("http", {host: "0.0.0.0", ssl: false});
+
+var connections = {
+  edison: { adaptor: 'intel-iot' }
+};
+
+var devices = {
+  leds: { driver: 'rgb-led', redPin: 3, greenPin: 5, bluePin: 6 },
+  gin: { driver: 'direct-pin', pin: 8 },
+  vodka: { driver: 'direct-pin', pin: 9 },
+  tonic: { driver: 'direct-pin', pin: 10 },
+  ginger: { driver: 'direct-pin', pin: 11 },
+  display: { driver: 'upm-jhd1313m1'}
+};
+
+if (config.camera) {
+  connections.opencv = { adaptor: "opencv" };
+  devices.camera = { driver: "camera", camera: 1 };
+}
 
 Cylon.robot({
   name: "drinkiebot",
 
   events: ['making_drink', 'cleaning_mode'],
 
-  connections: {
-    edison: { adaptor: 'intel-iot' }
-  },
-
-  devices: {
-    leds: { driver: 'rgb-led', redPin: 3, greenPin: 5, bluePin: 6 },
-    gin: { driver: 'direct-pin', pin: 8 },
-    vodka: { driver: 'direct-pin', pin: 9 },
-    tonic: { driver: 'direct-pin', pin: 10 },
-    ginger: { driver: 'direct-pin', pin: 11 },
-    display: { driver: 'upm-jhd1313m1'}
-  },
+  connections: connections,
+  devices: devices,
 
   writeToScreen: function(message) {
     this.display.setCursor(0,0);
@@ -96,7 +106,7 @@ Cylon.robot({
       make_vodka_tonic: this.makeVodkaTonic,
       make_moscow_mule: this.makeMoscowMule,
       make_gin_buck: this.makeGinBuck,
-      make_ginger_ale: this.makeGingerAle,                  
+      make_ginger_ale: this.makeGingerAle,
       clean: this.clean
     };
   },
