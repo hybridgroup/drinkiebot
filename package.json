@@ -1,0 +1,11 @@
+{
+  "name": "drinkiebot",
+  "version": "0.0.1",
+  "description": "Drink-creating robot based on Cylon.js",
+  "main": "drinkiebot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hybridgroup",
+  "license": "Apache-2"
+}
