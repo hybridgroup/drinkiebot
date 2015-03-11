@@ -27,45 +27,53 @@ Cylon.robot({
   },
 
   makeGinTonic: function() {
-    this.writeToScreen("Pouring Gin + Tonic");
-    shot('gin');
-    mixer('tonic');
+    this.writeToScreen("Gin + Tonic     ");
+    this.shot('gin');
+    this.mixer('tonic');
+    return "ok";
   },
 
   makeVodkaTonic: function() {
-    this.writeToScreen("Pouring Vodka + Tonic");
-    shot('vodka');
-    mixer('tonic');
+    this.writeToScreen("Vodka + Tonic   ");
+    this.shot('vodka');
+    this.mixer('tonic');
+    return "ok";
   },
 
   makeMoscowMule: function() {
-    this.writeToScreen("Pouring Moscow Mule");
-    shot('vodka');
-    mixer('ginger');
+    this.writeToScreen("Moscow Mule     ");
+    this.shot('vodka');
+    this.mixer('ginger');
+    return "ok";
   },
 
   makeGinBuck: function() {
-    this.writeToScreen("Pouring Gin Buck");
-    shot('gin');
-    mixer('ginger');
+    this.writeToScreen("Gin Buck        ");
+    this.shot('gin');
+    this.mixer('ginger');
+    return "ok";
   },
 
   makeGingerAle: function() {
-    this.writeToScreen("Pouring Ginger Ale");
-    mixer('ginger');
+    this.writeToScreen("Ginger Ale      ");
+    this.mixer('ginger');
+    return "ok";
   },
 
   shot: function(t) {
-    this.devices[t].digitalWrite(1);
+    var self = this;
+    self.devices[t].digitalWrite(1);
     after((1).seconds(), function() {
-      this.devices[t].digitalWrite(0);
+      self.devices[t].digitalWrite(0);
     });
   },
 
   mixer: function(t) {
-    this.devices[t].digitalWrite(1);
+    var self = this;
+    self.devices[t].digitalWrite(1);
     after((5).seconds(), function() {
-      this.devices[t].digitalWrite(0);
+      self.devices[t].digitalWrite(0);
+      self.readyToPour();
     });
   },
 
@@ -80,8 +88,12 @@ Cylon.robot({
     };
   },
 
-  work: function(my) {
-    this.writeToScreen("Ready.");
+  readyToPour: function() {
+    this.writeToScreen("Drinkiebot Ready");
     this.leds.setRGB(0x000000);
+  },
+
+  work: function(my) {
+    this.readyToPour();
   }
 }).start();
