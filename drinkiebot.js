@@ -32,7 +32,7 @@ Cylon.robot({
 
   writeToScreen: function(message) {
     this.display.setCursor(0,0);
-    this.display.write(message);
+    this.display.write(pad(message, 16));
   },
 
   clean: function() {
@@ -42,7 +42,7 @@ Cylon.robot({
   makeGinTonic: function() {
     this.emit('making_drink', { data: 'gin-tonic'});
     this.leds.setRGB("00ffff");
-    this.writeToScreen("Gin + Tonic     ");
+    this.writeToScreen("Gin + Tonic");
     this.shot('gin');
     this.mixer('tonic');
     return "ok";
@@ -51,7 +51,7 @@ Cylon.robot({
   makeVodkaTonic: function() {
     this.emit('making_drink', { data: 'vodka-tonic'});
     this.leds.setRGB("ff8000");
-    this.writeToScreen("Vodka + Tonic   ");
+    this.writeToScreen("Vodka + Tonic");
     this.shot('vodka');
     this.mixer('tonic');
     return "ok";
@@ -60,7 +60,7 @@ Cylon.robot({
   makeMoscowMule: function() {
     this.emit('making_drink', { data: 'moscow-mule'});
     this.leds.setRGB("ff0000");
-    this.writeToScreen("Moscow Mule     ");
+    this.writeToScreen("Moscow Mule");
     this.shot('vodka');
     this.mixer('ginger');
     return "ok";
@@ -69,7 +69,7 @@ Cylon.robot({
   makeGinBuck: function() {
     this.emit('making_drink', { data: 'gin-buck'});
     this.leds.setRGB("00ff00");
-    this.writeToScreen("Gin Buck        ");
+    this.writeToScreen("Gin Buck");
     this.shot('gin');
     this.mixer('ginger');
     return "ok";
@@ -78,7 +78,7 @@ Cylon.robot({
   makeGingerAle: function() {
     this.emit('making_drink', { data: 'ginger-ale'});
     this.leds.setRGB("00cc00");
-    this.writeToScreen("Ginger Ale      ");
+    this.writeToScreen("Ginger Ale");
     this.mixer('ginger');
     return "ok";
   },
@@ -131,3 +131,7 @@ Cylon.robot({
     this.readyToPour();
   }
 }).start();
+
+function pad(str, length) {
+  return str.length < length ? pad(str + " ", length) : str;
+};
