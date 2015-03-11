@@ -100,6 +100,16 @@ Cylon.robot({
     });
   },
 
+  takePhoto: function() {
+    this.leds.setRGB("ffffff");
+    if (config.camera) {
+      // take photo here
+
+      // then tweet it
+    }
+    this.leds.setRGB("000000");
+  },
+
   commands: function() {
     return {
       make_gin_tonic: this.makeGinTonic,
@@ -107,13 +117,14 @@ Cylon.robot({
       make_moscow_mule: this.makeMoscowMule,
       make_gin_buck: this.makeGinBuck,
       make_ginger_ale: this.makeGingerAle,
+      take_photo: this.takePhoto,
       clean: this.clean
     };
   },
 
   readyToPour: function() {
     this.writeToScreen("Drinkiebot Ready");
-    this.leds.setRGB(0x000000);
+    this.leds.setRGB("000000");
   },
 
   work: function(my) {

@@ -37,6 +37,13 @@
         "device": "",
         "name": "make_ginger_ale",
         "params": {}
+      },
+      {
+        "label": "Take Photo",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "take_photo",
+        "params": {}
       }
     ]
   }
