@@ -1,0 +1,43 @@
+{
+  "command_set":{
+    "name": "Drinkiebot",
+    "type": "list",
+    "commands":[
+      {
+        "label": "Gin + Tonic",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_gin_tonic",
+        "params": {}
+      },
+      {
+        "label": "Vodka + Tonic",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_vodka_tonic",
+        "params": {}
+      },
+      {
+        "label": "Moscow Mule",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_moscow_mule",
+        "params": {}
+      },
+      {
+        "label": "Gin Buck",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_gin_buck",
+        "params": {}
+      },
+      {
+        "label": "Ginger Ale",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_ginger_ale",
+        "params": {}
+      }
+    ]
+  }
+}
