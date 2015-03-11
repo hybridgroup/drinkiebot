@@ -27,6 +27,7 @@ Cylon.robot({
   },
 
   makeGinTonic: function() {
+    this.leds.setRGB("00ffff");
     this.writeToScreen("Gin + Tonic     ");
     this.shot('gin');
     this.mixer('tonic');
@@ -34,6 +35,7 @@ Cylon.robot({
   },
 
   makeVodkaTonic: function() {
+    this.leds.setRGB("ff8000");
     this.writeToScreen("Vodka + Tonic   ");
     this.shot('vodka');
     this.mixer('tonic');
@@ -41,6 +43,7 @@ Cylon.robot({
   },
 
   makeMoscowMule: function() {
+    this.leds.setRGB("ff0000");
     this.writeToScreen("Moscow Mule     ");
     this.shot('vodka');
     this.mixer('ginger');
@@ -48,6 +51,7 @@ Cylon.robot({
   },
 
   makeGinBuck: function() {
+    this.leds.setRGB("00ff00");
     this.writeToScreen("Gin Buck        ");
     this.shot('gin');
     this.mixer('ginger');
@@ -55,6 +59,7 @@ Cylon.robot({
   },
 
   makeGingerAle: function() {
+    this.leds.setRGB("00cc00");
     this.writeToScreen("Ginger Ale      ");
     this.mixer('ginger');
     return "ok";
