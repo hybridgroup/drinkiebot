@@ -76,7 +76,7 @@ Cylon.robot({
   shot: function(t) {
     var self = this;
     self.devices[t].digitalWrite(1);
-    after((1).seconds(), function() {
+    after((3).seconds(), function() {
       self.devices[t].digitalWrite(0);
     });
   },
@@ -84,7 +84,7 @@ Cylon.robot({
   mixer: function(t) {
     var self = this;
     self.devices[t].digitalWrite(1);
-    after((5).seconds(), function() {
+    after((15).seconds(), function() {
       self.devices[t].digitalWrite(0);
       self.readyToPour();
     });
