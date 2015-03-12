@@ -10,6 +10,7 @@ Features:
 	* RGB LEDs
 
 Drinkiebot requires a single board Linux SoC such as the Intel Edison that provides:
+
 	* 4 GPIO digital outputs
 	* 3 PWM
 	* 1 i2c port
