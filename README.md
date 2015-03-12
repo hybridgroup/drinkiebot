@@ -7,4 +7,4 @@ Features:
 	* Four pump system
 	* API
 	* Solid PVC construction
-	
+	* RGB LEDs
