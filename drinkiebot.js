@@ -4,6 +4,13 @@ var config = require("./config.json");
 
 Cylon.api("http", {host: "0.0.0.0", ssl: false});
 
+if (config.mqtt) {
+  Cylon.api("mqtt", {
+    broker: 'mqtt://test.mosquitto.org',
+    prefix: 'drinkiebot', // Optional
+  });
+}
+
 var connections = {
   edison: { adaptor: 'intel-iot' }
 };

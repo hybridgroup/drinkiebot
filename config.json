@@ -1,3 +1,4 @@
 {
-  "camera": false
+  "camera": false,
+  "mqtt": false
 }
