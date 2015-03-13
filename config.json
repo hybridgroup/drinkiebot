@@ -1,4 +1,5 @@
 {
   "camera": false,
+  "cameraId": 0,
   "mqtt": false
 }

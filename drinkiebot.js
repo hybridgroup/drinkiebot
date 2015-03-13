@@ -28,8 +28,9 @@ if (config.camera) {
   connections.opencv = { adaptor: "opencv" };
   devices.camera = {
     driver: "camera",
-    camera: 1,
-    haarcascade: "./haarcascade_frontalface_alt.xml"
+    camera: config.cameraId,
+    haarcascade: "./haarcascade_frontalface_alt.xml",
+    connection: "opencv"
   };
 }
 
