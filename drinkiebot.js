@@ -93,7 +93,7 @@ Cylon.robot({
   shot: function(t) {
     var self = this;
     self.devices[t].digitalWrite(1);
-    after((3).seconds(), function() {
+    after((2).seconds(), function() {
       self.devices[t].digitalWrite(0);
     });
   },
@@ -101,7 +101,7 @@ Cylon.robot({
   mixer: function(t) {
     var self = this;
     self.devices[t].digitalWrite(1);
-    after((15).seconds(), function() {
+    after((5).seconds(), function() {
       self.devices[t].digitalWrite(0);
       self.readyToPour();
     });
@@ -117,6 +117,26 @@ Cylon.robot({
     this.leds.setRGB("000000");
   },
 
+  attract: function() {
+    var self = this;
+    self.leds.setRGB("ffffff");
+    after((2).seconds(), function() {
+      self.leds.setRGB("00cc00");
+    });
+    after((4).seconds(), function() {
+      self.leds.setRGB("00ff00");
+    });
+    after((6).seconds(), function() {
+      self.leds.setRGB("00ffff");
+    });
+    after((8).seconds(), function() {
+      self.leds.setRGB("ff0000");
+    });
+    after((10).seconds(), function() {
+      self.leds.setRGB("000000");
+    });
+  },
+
   commands: function() {
     return {
       make_gin_tonic: this.makeGinTonic,
@@ -125,6 +145,7 @@ Cylon.robot({
       make_gin_buck: this.makeGinBuck,
       make_ginger_ale: this.makeGingerAle,
       take_photo: this.takePhoto,
+      attract: this.attract,
       clean: this.clean
     };
   },
