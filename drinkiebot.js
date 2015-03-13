@@ -26,7 +26,11 @@ var devices = {
 
 if (config.camera) {
   connections.opencv = { adaptor: "opencv" };
-  devices.camera = { driver: "camera", camera: 1 };
+  devices.camera = {
+    driver: "camera",
+    camera: 1,
+    haarcascade: "./haarcascade_frontalface_alt.xml"
+  };
 }
 
 Cylon.robot({
@@ -36,6 +40,8 @@ Cylon.robot({
 
   connections: connections,
   devices: devices,
+
+  cameraReady: false,
 
   writeToScreen: function(message) {
     this.display.setCursor(0,0);
@@ -108,13 +114,42 @@ Cylon.robot({
   },
 
   takePhoto: function() {
-    this.leds.setRGB("ffffff");
-    if (config.camera) {
-      // take photo here
+    var that = this;
 
-      // then tweet it
+    that.leds.setRGB("ffffff");
+    if (config.camera && that.cameraReady) {
+      that.camera.readFrame();
+      that.camera.once("frameReady", function(err, im) {
+        that.camera.detectFaces(im);
+      });
+
+      that.opencv.once('facesDetected', function(err, im, faces) {
+        var biggest = 0,
+            face = null;
+
+        for (var i = 0; i < faces.length; i++) {
+          var f = faces[i];
+          if (f.width > biggest) {
+            biggest = f.width;
+            face = f;
+          }
+        }
+
+        if (face !== null) {
+          im.rectangle(
+            [face.x, face.y],
+            [face.x + face.width, face.y + face.height],
+            [0, 255, 0],
+            2
+          );
+          im.save("/tmp/"+Date.now()+".jpg");
+          that.writeToScreen("Image saved!");
+        } else {
+          that.writeToScreen("No face detected!");
+        }
+        that.leds.setRGB("000000");
+      });
     }
-    this.leds.setRGB("000000");
   },
 
   attract: function() {
@@ -155,8 +190,15 @@ Cylon.robot({
     this.leds.setRGB("000000");
   },
 
+
   work: function(my) {
-    this.readyToPour();
+    var that = this;
+    if(config.camera) {
+      my.camera.once("cameraReady", function() {
+        that.cameraReady = true;
+      });
+    }
+    that.readyToPour();
   }
 }).start();
 
