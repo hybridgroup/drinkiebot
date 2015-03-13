@@ -15,6 +15,19 @@ Drinkiebot requires a single board Linux SoC such as the Intel Edison that provi
 	* 3 PWM
 	* 1 i2c port
 
+## Frame
+
+	* 15 T-s
+	* 8 corners
+	* 2 extenders
+	* 6 - 15 inch tubes
+	* 10 - 4 3/4 inch tubes
+	* 3 - 3 1/2 inch tubes
+	* 2 - 3 inch tubes
+	* 9 - 9 1/2 inch tubes
+	* 4 - 2 inch tubes
+
+
 ## Circuitry
 The basic circuit uses one Darlington TP120 transistor to control each 12V pumps. A rectifing diode is added to protect the Linux computer from voltage spikes when the pump is shut off. 
 
