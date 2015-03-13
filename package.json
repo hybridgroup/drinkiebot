@@ -13,7 +13,6 @@
     "cylon-api-http": "^0.1.1",
     "cylon-gpio": "^0.22.0",
     "cylon-i2c": "^0.20.0",
-    "cylon-intel-iot": "^0.5.0",
-    "cylon-opencv": "^0.12.1"
+    "cylon-intel-iot": "^0.5.0"
   }
 }
