@@ -8,6 +8,7 @@ Features:
 	* API
 	* Solid PVC construction
 	* RGB LEDs
+	* Optional OpenCV computer vision support
 
 Drinkiebot requires a single board Linux SoC such as the Intel Edison that provides:
 
@@ -36,7 +37,11 @@ Three Darlington TP120 transistors are used to control the RGB LED strip, once e
 The i2c output is connected to a `jhd1313m1` backlit LED display to show status.
 
 ## Camera
-You can use the optional support for OpenCV and a web cam. First install OpenCV itself. Then install `npm inistall cylon-opencv`. Last, set the `camera` option in the `config.json` file to `true`.
+You can use the optional support for OpenCV and a web cam. This let's you take "drinkies" aka photos of the humans who have just had a drink made for them by a robot.
+
+First install OpenCV itself. Then install `npm inistall cylon-opencv`. Last, set the `camera` option in the `config.json` file to `true`.
+
+The LEDs will light up brightly, and then Drinkiebot will scan until it spots faces, then save an image.
 
 ## License
 Copyright (c) 2015 The Hybrid Group. Licensed under the Apache 2.0 license.
