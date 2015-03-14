@@ -132,21 +132,18 @@ Cylon.robot({
             face = null;
 
         for (var i = 0; i < faces.length; i++) {
-          var f = faces[i];
-          if (f.width > biggest) {
-            biggest = f.width;
-            face = f;
+          face = faces[i];
+          if (config.trackFaces) {
+            im.rectangle(
+              [face.x, face.y],
+              [face.x + face.width, face.y + face.height],
+              [0, 255, 0],
+              2
+            );
           }
         }
 
         if (face !== null) {
-          im.rectangle(
-            [face.x, face.y],
-            [face.x + face.width, face.y + face.height],
-            [0, 255, 0],
-            2
-          );
-
           imgur.postImage(process.env.TOKEN, process.env.ALBUM, im.toBuffer(), 
             function(err, data) {
               if (err) {
