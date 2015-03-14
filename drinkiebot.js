@@ -111,7 +111,7 @@ Cylon.robot({
   mixer: function(t) {
     var self = this;
     self.devices[t].digitalWrite(1);
-    after((5).seconds(), function() {
+    after((8).seconds(), function() {
       self.devices[t].digitalWrite(0);
       self.readyToPour();
     });
@@ -192,6 +192,8 @@ Cylon.robot({
       make_ginger_ale: this.makeGingerAle,
       take_photo: this.takePhoto,
       attract: this.attract,
+      shot: this.shot,
+      mixer: this.mixer,
       clean: this.clean
     };
   },
