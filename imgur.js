@@ -5,7 +5,7 @@ var postImage = function(token, album, image, callback) {
 	  method: "POST",
 	  url: 'https://api.imgur.com/3/image',
 	  headers: {
-	    'Authorization ': 'Bearer ' + token
+	    'Authorization ': 'Client-ID ' + token
 	  },
 	  formData: {
 	    image: image,
