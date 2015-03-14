@@ -44,6 +44,13 @@
         "device": "",
         "name": "take_photo",
         "params": {}
+      },
+      {
+        "label": "Attract Mode",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "attract",
+        "params": {}
       }
     ]
   }
