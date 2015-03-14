@@ -1,6 +1,9 @@
 var Cylon = require('cylon');
+var request = require('request');
+var fs = require('fs');
 
 var config = require("./config.json");
+
 
 Cylon.api("http", {host: "0.0.0.0", ssl: false});
 
@@ -143,8 +146,26 @@ Cylon.robot({
             [0, 255, 0],
             2
           );
-          im.save("/tmp/"+Date.now()+".jpg");
-          that.writeToScreen("Image saved!");
+          var options = {
+            method: "POST",
+            url: 'https://api.imgur.com/3/image',
+            headers: {
+              'Authorization ': 'Bearer ' + process.env.TOKEN
+            },
+            formData: {
+              image: im.toBuffer(),
+              album: process.env.ALBUM
+            }
+          };
+          request(options, function (err, res, body) {
+            if (err) {
+              console.log(err);
+              that.writeToScreen("Error uploading image!");
+            } else {
+              console.log(body);
+              that.writeToScreen("Image saved!");
+            }
+          })
         } else {
           that.writeToScreen("No face detected!");
         }
