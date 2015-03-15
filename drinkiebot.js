@@ -1,9 +1,14 @@
 var Cylon = require('cylon');
-var imgur = require('./imgur');
 var fs = require('fs');
+var imgur = require('./imgur');
 
 var config = require("./config.json");
 
+var totals = { ginTonic:0, vodkaTonic: 0, gingerAle: 0, moscowMule:0, ginBuck: 0 };
+
+if (fs.existsSync("totals.json")) {
+  totals = JSON.parse(fs.readFileSync("totals.json", { encoding: 'utf8' }));
+}
 
 Cylon.api("http", {host: "0.0.0.0", ssl: false});
 
@@ -59,12 +64,17 @@ Cylon.robot({
     this.writeToScreen("Cleaning mode ON");
   },
 
+  writeTotals: function() {
+    fs.writeFileSync("totals.json", JSON.stringify(totals));
+  },
+
   makeGinTonic: function() {
     this.emit('making_drink', { data: 'gin-tonic'});
     this.leds.setRGB("00ffff");
     this.writeToScreen("Gin + Tonic");
     this.shot('gin');
     this.mixer('tonic');
+    totals.ginTonic += 1;
     return "ok";
   },
 
@@ -74,6 +84,7 @@ Cylon.robot({
     this.writeToScreen("Vodka + Tonic");
     this.shot('vodka');
     this.mixer('tonic');
+    totals.vodkaTonic += 1;
     return "ok";
   },
 
@@ -83,6 +94,7 @@ Cylon.robot({
     this.writeToScreen("Moscow Mule");
     this.shot('vodka');
     this.mixer('ginger');
+    totals.moscowMule += 1;
     return "ok";
   },
 
@@ -92,6 +104,7 @@ Cylon.robot({
     this.writeToScreen("Gin Buck");
     this.shot('gin');
     this.mixer('ginger');
+    totals.ginBuck += 1;
     return "ok";
   },
 
@@ -100,6 +113,7 @@ Cylon.robot({
     this.leds.setRGB("00cc00");
     this.writeToScreen("Ginger Ale");
     this.mixer('ginger');
+    totals.gingerAle += 1;
     return "ok";
   },
 
@@ -215,6 +229,10 @@ Cylon.robot({
       });
     }
     that.readyToPour();
+
+    every(1000, function() {
+      my.writeTotals();
+    });
   }
 }).start();
 
