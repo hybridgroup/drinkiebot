@@ -14,6 +14,7 @@
     "cylon-gpio": "^0.22.0",
     "cylon-i2c": "^0.20.0",
     "cylon-intel-iot": "^0.5.0",
+    "cylon-pebble": "^0.15.0",
     "request": "^2.53.0"
   }
 }

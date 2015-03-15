@@ -15,16 +15,18 @@ if (config.mqtt) {
 }
 
 var connections = {
-  edison: { adaptor: 'intel-iot' }
+  edison: { adaptor: 'intel-iot' },
+  pebble: { adaptor: 'pebble' }
 };
 
 var devices = {
-  leds: { driver: 'rgb-led', redPin: 3, greenPin: 5, bluePin: 6 },
-  gin: { driver: 'direct-pin', pin: 8 },
-  vodka: { driver: 'direct-pin', pin: 9 },
-  tonic: { driver: 'direct-pin', pin: 10 },
-  ginger: { driver: 'direct-pin', pin: 11 },
-  display: { driver: 'upm-jhd1313m1'}
+  leds: { driver: 'rgb-led', redPin: 3, greenPin: 5, bluePin: 6, connection: 'edison' },
+  gin: { driver: 'direct-pin', pin: 8, connection: 'edison' },
+  vodka: { driver: 'direct-pin', pin: 9, connection: 'edison' },
+  tonic: { driver: 'direct-pin', pin: 10, connection: 'edison' },
+  ginger: { driver: 'direct-pin', pin: 11, connection: 'edison' },
+  display: { driver: 'upm-jhd1313m1', connection: 'edison'},
+  pebble: { driver: 'pebble', connection: 'pebble' }
 };
 
 if (config.camera) {
@@ -50,6 +52,7 @@ Cylon.robot({
   writeToScreen: function(message) {
     this.display.setCursor(0,0);
     this.display.write(pad(message, 16));
+    this.pebble.send_notification(message);
   },
 
   clean: function() {
