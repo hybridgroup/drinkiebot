@@ -4,7 +4,7 @@ var imgur = require('./imgur');
 
 var config = require("./config.json");
 
-var totals = { ginTonic:0, vodkaTonic: 0, gingerAle: 0, moscowMule:0, ginBuck: 0 };
+var totals = { ginTonic: 0, vodkaTonic: 0, gingerAle: 0, moscowMule: 0, ginBuck: 0 };
 
 if (fs.existsSync("totals.json")) {
   totals = JSON.parse(fs.readFileSync("totals.json", { encoding: 'utf8' }));
@@ -53,6 +53,7 @@ Cylon.robot({
   devices: devices,
 
   cameraReady: false,
+  pouring: false,
 
   writeToScreen: function(message) {
     this.display.setCursor(0,0);
@@ -69,52 +70,69 @@ Cylon.robot({
   },
 
   makeGinTonic: function() {
-    this.emit('making_drink', { data: 'gin-tonic'});
-    this.leds.setRGB("00ffff");
-    this.writeToScreen("Gin + Tonic");
-    this.shot('gin');
-    this.mixer('tonic');
-    totals.ginTonic += 1;
-    return "ok";
+    if (!this.pouring) {
+      this.pouring = true;
+      this.emit('making_drink', { data: 'gin-tonic'});
+      this.makeDrink({rgb: '00ffff', message: 'Gin + Tonic', mixer: 'tonic', shot: 'gin'});
+      totals.ginTonic += 1;
+      return "ok";
+    }
+    return "busy";
   },
 
   makeVodkaTonic: function() {
-    this.emit('making_drink', { data: 'vodka-tonic'});
-    this.leds.setRGB("ff8000");
-    this.writeToScreen("Vodka + Tonic");
-    this.shot('vodka');
-    this.mixer('tonic');
-    totals.vodkaTonic += 1;
-    return "ok";
+    if (!this.pouring) {
+      this.pouring = true;
+      this.emit('making_drink', { data: 'vodka-tonic'});
+      this.makeDrink({rgb: 'ff8000', message: 'Vodka + Tonic', mixer: 'tonic', shot: 'vodka'});
+      totals.vodkaTonic += 1;
+      return "ok";
+    }
+    return "busy";
   },
 
   makeMoscowMule: function() {
-    this.emit('making_drink', { data: 'moscow-mule'});
-    this.leds.setRGB("ff0000");
-    this.writeToScreen("Moscow Mule");
-    this.shot('vodka');
-    this.mixer('ginger');
-    totals.moscowMule += 1;
-    return "ok";
+    if (!this.pouring) {
+      this.pouring = true;
+      this.emit('making_drink', { data: 'moscow-mule'});
+      this.makeDrink({rgb: 'ff0000', message: 'Moscow Mule', mixer: 'ginger', shot: 'vodka'});
+      totals.moscowMule += 1;
+      return "ok";
+    }
+    return "busy";
   },
 
   makeGinBuck: function() {
-    this.emit('making_drink', { data: 'gin-buck'});
-    this.leds.setRGB("00ff00");
-    this.writeToScreen("Gin Buck");
-    this.shot('gin');
-    this.mixer('ginger');
-    totals.ginBuck += 1;
-    return "ok";
+    if (!this.pouring) {
+      this.pouring = true;
+      this.emit('making_drink', { data: 'gin-buck'});
+      this.makeDrink({rgb: '00ff00', message: 'Gin Buck', mixer: 'ginger', shot: 'gin'});
+      totals.ginBuck += 1;
+      return "ok";
+    }
+    return "busy";
   },
 
   makeGingerAle: function() {
-    this.emit('making_drink', { data: 'ginger-ale'});
-    this.leds.setRGB("00cc00");
-    this.writeToScreen("Ginger Ale");
-    this.mixer('ginger');
-    totals.gingerAle += 1;
-    return "ok";
+    if (!this.pouring) {
+      this.pouring = true;
+      this.emit('making_drink', { data: 'ginger-ale'});
+      this.makeDrink({rgb: "00cc00", message: "Ginger Ale", mixer: 'ginger'});
+      totals.gingerAle += 1;
+      return "ok";
+    }
+    return "busy";
+  },
+
+  makeDrink: function(d) {
+    this.leds.setRGB(d.rgb);
+    this.writeToScreen(d.message);
+
+    this.mixer(d.mixer);
+
+    if (d.shot) {
+      this.shot(d.shot);
+    }
   },
 
   shot: function(t) {
@@ -216,6 +234,7 @@ Cylon.robot({
   },
 
   readyToPour: function() {
+    this.pouring = false;
     this.writeToScreen("Drinkiebot Ready");
     this.leds.setRGB("000000");
   },
