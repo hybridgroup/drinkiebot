@@ -62,7 +62,14 @@ Cylon.robot({
   },
 
   clean: function() {
-    this.writeToScreen("Cleaning mode ON");
+    this.leds.setRGB("ffffff");
+    this.writeToScreen("Cleaning...");
+    this.mixer('gin');
+    this.mixer('vodka');
+    this.mixer('tonic');
+    this.mixer('ginger');
+    this.readyToPour();
+    return "ok";
   },
 
   writeTotals: function() {
