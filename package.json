@@ -1,6 +1,6 @@
 {
   "name": "drinkiebot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Drink-creating robot based on Cylon.js",
   "main": "drinkiebot.js",
   "scripts": {
@@ -9,12 +9,13 @@
   "author": "hybridgroup",
   "license": "Apache-2",
   "dependencies": {
-    "cylon": "^0.22.1",
-    "cylon-api-http": "^0.1.1",
-    "cylon-gpio": "^0.22.0",
-    "cylon-i2c": "^0.20.0",
-    "cylon-intel-iot": "^0.5.0",
-    "cylon-pebble": "^0.15.0",
-    "request": "^2.53.0"
+    "cylon": "^1.2.0",
+    "cylon-api-http": "^0.4.0",
+    "cylon-gpio": "^0.27.0",
+    "cylon-i2c": "^0.23.0",
+    "cylon-intel-iot": "^0.8.0",
+    "cylon-pebble": "^0.18.0",
+    "imgur": "^0.1.7",
+    "tmp": "^0.0.28"
   }
 }

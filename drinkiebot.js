@@ -1,38 +1,48 @@
 var Cylon = require('cylon');
 var fs = require('fs');
+var tmp = require('tmp');
 var imgur = require('./imgur');
 
 var config = require("./config.json");
-
-var totals = { ginTonic: 0, vodkaTonic: 0, gingerAle: 0, moscowMule: 0, ginBuck: 0 };
-
-if (fs.existsSync("totals.json")) {
-  totals = JSON.parse(fs.readFileSync("totals.json", { encoding: 'utf8' }));
-}
 
 Cylon.api("http", {host: "0.0.0.0", ssl: false});
 
 if (config.mqtt) {
   Cylon.api("mqtt", {
-    broker: 'mqtt://test.mosquitto.org',
+    broker: config.mqttBroker,
     prefix: 'drinkiebot', // Optional
   });
 }
 
 var connections = {
-  edison: { adaptor: 'intel-iot' },
-  pebble: { adaptor: 'pebble' }
+  edison: { adaptor: 'intel-iot' }
 };
 
 var devices = {
   leds: { driver: 'rgb-led', redPin: 3, greenPin: 5, bluePin: 6, connection: 'edison' },
-  gin: { driver: 'direct-pin', pin: 8, connection: 'edison' },
-  vodka: { driver: 'direct-pin', pin: 9, connection: 'edison' },
-  tonic: { driver: 'direct-pin', pin: 10, connection: 'edison' },
-  ginger: { driver: 'direct-pin', pin: 11, connection: 'edison' },
-  display: { driver: 'upm-jhd1313m1', connection: 'edison'},
-  pebble: { driver: 'pebble', connection: 'pebble' }
+  display: { driver: 'upm-jhd1313m1', connection: 'edison'}
 };
+
+var drinks = require("./drinks.json");
+var totals = {};
+
+var pumps = drinks.pumps;
+for (pump in pumps) {
+  devices[pump] = pumps[pump];
+  totals[pumps[pump].data] = 0;
+}
+
+if (fs.existsSync("totals.json")) {
+  totals = JSON.parse(fs.readFileSync("totals.json", { encoding: 'utf8' }));
+}
+
+if (config.pebble) {
+  connections.pebble = { adaptor: "pebble" };
+  devices.pebble = {
+    driver: "pebble",
+    connection: "pebble"
+  };
+}
 
 if (config.camera) {
   connections.opencv = { adaptor: "opencv" };
@@ -54,20 +64,23 @@ Cylon.robot({
 
   cameraReady: false,
   pouring: false,
+  cmds: {},
 
   writeToScreen: function(message) {
     this.display.setCursor(0,0);
     this.display.write(pad(message, 16));
-    this.pebble.send_notification(message);
+    if (config.pebble) {
+      this.pebble.send_notification(message);
+    }
   },
 
   clean: function() {
     this.leds.setRGB("ffffff");
     this.writeToScreen("Cleaning...");
-    this.mixer('gin');
-    this.mixer('vodka');
-    this.mixer('tonic');
-    this.mixer('ginger');
+    for (pump in pumps) {
+      this.mixer(pump);
+    }
+
     this.readyToPour();
     return "ok";
   },
@@ -76,62 +89,8 @@ Cylon.robot({
     fs.writeFileSync("totals.json", JSON.stringify(totals));
   },
 
-  makeGinTonic: function() {
-    if (!this.pouring) {
-      this.pouring = true;
-      this.emit('making_drink', { data: 'gin-tonic'});
-      this.makeDrink({rgb: '00ffff', message: 'Gin + Tonic', mixer: 'tonic', shot: 'gin'});
-      totals.ginTonic += 1;
-      return "ok";
-    }
-    return "busy";
-  },
-
-  makeVodkaTonic: function() {
-    if (!this.pouring) {
-      this.pouring = true;
-      this.emit('making_drink', { data: 'vodka-tonic'});
-      this.makeDrink({rgb: 'ff8000', message: 'Vodka + Tonic', mixer: 'tonic', shot: 'vodka'});
-      totals.vodkaTonic += 1;
-      return "ok";
-    }
-    return "busy";
-  },
-
-  makeMoscowMule: function() {
-    if (!this.pouring) {
-      this.pouring = true;
-      this.emit('making_drink', { data: 'moscow-mule'});
-      this.makeDrink({rgb: 'ff0000', message: 'Moscow Mule', mixer: 'ginger', shot: 'vodka'});
-      totals.moscowMule += 1;
-      return "ok";
-    }
-    return "busy";
-  },
-
-  makeGinBuck: function() {
-    if (!this.pouring) {
-      this.pouring = true;
-      this.emit('making_drink', { data: 'gin-buck'});
-      this.makeDrink({rgb: '00ff00', message: 'Gin Buck', mixer: 'ginger', shot: 'gin'});
-      totals.ginBuck += 1;
-      return "ok";
-    }
-    return "busy";
-  },
-
-  makeGingerAle: function() {
-    if (!this.pouring) {
-      this.pouring = true;
-      this.emit('making_drink', { data: 'ginger-ale'});
-      this.makeDrink({rgb: "00cc00", message: "Ginger Ale", mixer: 'ginger'});
-      totals.gingerAle += 1;
-      return "ok";
-    }
-    return "busy";
-  },
-
   makeDrink: function(d) {
+    var self = this;
     this.leds.setRGB(d.rgb);
     this.writeToScreen(d.message);
 
@@ -140,6 +99,10 @@ Cylon.robot({
     if (d.shot) {
       this.shot(d.shot);
     }
+
+    after((10).seconds(), function(){
+      self.readyToPour();
+    });
   },
 
   shot: function(t) {
@@ -155,54 +118,38 @@ Cylon.robot({
     self.devices[t].digitalWrite(1);
     after((8).seconds(), function() {
       self.devices[t].digitalWrite(0);
-      self.readyToPour();
     });
   },
 
   takePhoto: function() {
     var that = this;
 
-    that.leds.setRGB("ffffff");
     if (config.camera && that.cameraReady) {
+      that.leds.setRGB("ffffff");
       that.camera.readFrame();
-      that.camera.once("frameReady", function(err, im) {
-        that.camera.detectFaces(im);
-      });
-
-      that.opencv.once('facesDetected', function(err, im, faces) {
-        var biggest = 0,
-            face = null;
-
-        for (var i = 0; i < faces.length; i++) {
-          face = faces[i];
-          if (config.trackFaces) {
-            im.rectangle(
-              [face.x, face.y],
-              [face.x + face.width, face.y + face.height],
-              [0, 255, 0],
-              2
-            );
-          }
-        }
-
-        if (face !== null) {
-          imgur.postImage(process.env.TOKEN, process.env.ALBUM, im.toBuffer(), 
-            function(err, data) {
-              if (err) {
-                console.log(err);
-                that.writeToScreen("Error uploading image!");
-              } else {
-                console.log(data);
-                that.writeToScreen("Image saved!");
-              }
-            }
-          );
-        } else {
-          that.writeToScreen("No face detected!");
-        }
-        that.leds.setRGB("000000");
-      });
     }
+    return "ok";
+  },
+
+  postImage: function(im) {
+    if (!config.imgurToken || !config.imgurAlbum) {return;}
+
+    var self = this;
+    self.writeToScreen("Saving image...");
+    var name = tmp.tmpNameSync({ template: '/tmp/tmp-XXXXXX.jpg' });
+    im.save(name);
+
+    imgur.postImage(config.imgurToken, config.imgurAlbum, name,
+      function(err, data) {
+        if (err) {
+          console.log(err);
+          self.writeToScreen("Error uploading image!");
+        } else {
+          console.log(data);
+          self.writeToScreen("Image saved!");
+        }
+      }
+    );
   },
 
   attract: function() {
@@ -226,18 +173,13 @@ Cylon.robot({
   },
 
   commands: function() {
-    return {
-      make_gin_tonic: this.makeGinTonic,
-      make_vodka_tonic: this.makeVodkaTonic,
-      make_moscow_mule: this.makeMoscowMule,
-      make_gin_buck: this.makeGinBuck,
-      make_ginger_ale: this.makeGingerAle,
-      take_photo: this.takePhoto,
-      attract: this.attract,
-      shot: this.shot,
-      mixer: this.mixer,
-      clean: this.clean
-    };
+    this.cmds["take_photo"] = this.takePhoto;
+    this.cmds["attract"] = this.attract;
+    this.cmds["shot"] = this.shot;
+    this.cmds["mixer"] = this.takePhoto;
+    this.cmds["clean"] = this.clean;
+
+    return this.cmds;
   },
 
   readyToPour: function() {
@@ -246,14 +188,58 @@ Cylon.robot({
     this.leds.setRGB("000000");
   },
 
-
   work: function(my) {
     var that = this;
+    var recipes = drinks.recipes;
+    var f;
+
+    for (var recipe in recipes) {
+      f = makeRecipe(that,recipes[recipe]);
+
+      that[recipe] = f;
+      that.cmds[recipes[recipe].command] = f;
+    }
+
     if(config.camera) {
       my.camera.once("cameraReady", function() {
         that.cameraReady = true;
       });
+
+      my.camera.on("frameReady", function(err, im) {
+        if (config.trackFaces) {
+          my.camera.detectFaces(im);
+        } else {
+          my.postImage(im);
+          my.leds.setRGB("000000");
+        }
+      });
+
+      my.camera.on("facesDetected", function(err, im, faces) {
+        var biggest = 0,
+            face = null;
+
+        for (var i = 0; i < faces.length; i++) {
+          face = faces[i];
+          if (config.trackFaces) {
+            im.rectangle(
+              [face.x, face.y],
+              [face.x + face.width, face.y + face.height],
+              [0, 255, 0],
+              2
+            );
+          }
+        }
+
+        if (face !== null) {
+          my.writeToScreen("Face detected!");
+          my.postImage(im);
+        } else {
+          my.writeToScreen("No face detected!");
+        }
+        my.leds.setRGB("000000");
+      });
     }
+
     that.readyToPour();
 
     every(1000, function() {
@@ -265,3 +251,24 @@ Cylon.robot({
 function pad(str, length) {
   return str.length < length ? pad(str + " ", length) : str;
 };
+
+function makeRecipe(self, r) {
+  return function() {
+    if (!self.pouring) {
+      self.pouring = true;
+      self.emit('making_drink', { data: r.data});
+      var mix = {rgb: r.rgb, message: r.message};
+      if (r.mixer) {
+        mix.mixer = r.mixer;
+      }
+      if (r.shot) {
+        mix.shot = r.shot;
+      }
+
+      self.makeDrink(mix);
+      totals[r.data] += 1;
+      return "ok";
+    }
+    return "busy";
+  };
+}

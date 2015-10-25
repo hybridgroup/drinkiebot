@@ -1,0 +1,49 @@
+{
+  "recipes": {
+    "ginTonic": {
+      "data": "gin-tonic",
+      "command": "make_gin_tonic",
+      "rgb": "00ffff",
+      "message": "Gin + Tonic",
+      "mixer": "tonic",
+      "shot": "gin"
+    },
+    "vodkaTonic": {
+      "data": "vodka-tonic",
+      "command": "make_vodka_tonic",
+      "rgb": "ff8000",
+      "message": "Vodka + Tonic",
+      "mixer": "tonic",
+      "shot": "vodka"
+    },
+    "moscowMule": {
+      "data": "moscow-mule",
+      "command": "make_moscow_mule",
+      "rgb": "ff0000",
+      "message": "Moscow Mule",
+      "mixer": "ginger",
+      "shot": "vodka"
+    },
+    "ginBuck": {
+      "data": "gin-buck",
+      "command": "make_gin_buck",
+      "rgb": "00ff00",
+      "message": "Gin Buck",
+      "mixer": "ginger",
+      "shot": "gin"
+    },
+    "gingerAle": {
+      "data": "ginger-ale",
+      "command": "make_ginger_ale",
+      "rgb": "00cc00",
+      "message": "Ginger Ale",
+      "mixer": "ginger"
+    }
+  },
+  "pumps": {
+    "gin": { "driver": "direct-pin", "pin": 8, "connection": "edison" },
+    "vodka": { "driver": "direct-pin", "pin": 9, "connection": "edison" },
+    "tonic": { "driver": "direct-pin", "pin": 10, "connection": "edison" },
+    "ginger": { "driver": "direct-pin", "pin": 11, "connection": "edison" }
+  }
+}
