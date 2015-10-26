@@ -1,0 +1,8 @@
+{
+  "pumps": {
+    "gin": { "driver": "direct-pin", "pin": 8, "connection": "edison" },
+    "vodka": { "driver": "direct-pin", "pin": 9, "connection": "edison" },
+    "tonic": { "driver": "direct-pin", "pin": 10, "connection": "edison" },
+    "ginger": { "driver": "direct-pin", "pin": 11, "connection": "edison" }
+  }
+}

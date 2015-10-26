@@ -1,0 +1,8 @@
+{
+  "pumps": {
+    "grenadine": { "driver": "direct-pin", "pin": 8, "connection": "edison" },
+    "mango": { "driver": "direct-pin", "pin": 9, "connection": "edison" },
+    "orange": { "driver": "direct-pin", "pin": 10, "connection": "edison" },
+    "pineapple": { "driver": "direct-pin", "pin": 11, "connection": "edison" }
+  }
+}

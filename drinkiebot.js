@@ -23,14 +23,14 @@ var devices = {
   display: { driver: 'upm-jhd1313m1', connection: 'edison'}
 };
 
-var drinks = require("./" + config.drinks);
-var totals = {};
-
-var pumps = drinks.pumps;
+var pumps = require("./" + config.pumps);
 for (pump in pumps) {
   devices[pump] = pumps[pump];
   totals[pumps[pump].data] = 0;
 }
+
+var drinks = require("./" + config.drinks);
+var totals = {};
 
 if (fs.existsSync("totals.json")) {
   totals = JSON.parse(fs.readFileSync("totals.json", { encoding: 'utf8' }));
@@ -91,7 +91,7 @@ Cylon.robot({
 
   makeDrink: function(d) {
     var self = this;
-    this.leds.setRGB(d.rgb);
+    this.leds.setRGB(d.color);
     this.writeToScreen(d.message);
 
     this.mixer(d.mixer);
@@ -257,7 +257,7 @@ function makeRecipe(self, r) {
     if (!self.pouring) {
       self.pouring = true;
       self.emit('making_drink', { data: r.data});
-      var mix = {rgb: r.rgb, message: r.message};
+      var mix = {color: r.color, message: r.message};
       if (r.mixer) {
         mix.mixer = r.mixer;
       }
