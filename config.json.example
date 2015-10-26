@@ -1,7 +1,8 @@
 {
-  "camera": false,
+  "drinks": "drinks.json",
+  "camera": true,
   "cameraId": 0,
-  "trackFaces": true,
+  "trackFaces": false,
   "mqtt": false,
   "mqttBroker": "mqtt://test.mosquitto.org",
   "pebble": false,

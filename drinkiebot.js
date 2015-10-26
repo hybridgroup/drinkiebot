@@ -23,7 +23,7 @@ var devices = {
   display: { driver: 'upm-jhd1313m1', connection: 'edison'}
 };
 
-var drinks = require("./drinks.json");
+var drinks = require("./" + config.drinks);
 var totals = {};
 
 var pumps = drinks.pumps;
