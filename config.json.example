@@ -1,0 +1,10 @@
+{
+  "camera": false,
+  "cameraId": 0,
+  "trackFaces": true,
+  "mqtt": false,
+  "mqttBroker": "mqtt://test.mosquitto.org",
+  "pebble": false,
+  "imgurToken": "123",
+  "imgurAlbum": "456"
+}

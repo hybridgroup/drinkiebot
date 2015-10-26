@@ -1,0 +1,56 @@
+{
+  "recipes": {
+    "mangoPina": {
+      "data": "mango-pina",
+      "command": "make_mango_pina",
+      "rgb": "00ffff",
+      "message": "Mango Pina",
+      "mixer": "pineapple",
+      "shot": "mango"
+    },
+    "cinderella": {
+      "data": "cinderella",
+      "command": "make_cinderella",
+      "rgb": "ff8000",
+      "message": "Cinderella",
+      "mixer": "pineapple",
+      "shot": "grenadine"
+    },
+    "virginSunrise": {
+      "data": "virgin-sunrise",
+      "command": "make_sunrise",
+      "rgb": "ff0000",
+      "message": "Sunrise",
+      "mixer": "orange",
+      "shot": "grenadine"
+    },
+    "tropical": {
+      "data": "tropical",
+      "command": "make_tropical",
+      "rgb": "00ff00",
+      "message": "Tropical",
+      "mixer": "orange",
+      "shot": "mango"
+    },
+    "orangeJuice": {
+      "data": "orange-juice",
+      "command": "make_orange_juice",
+      "rgb": "00cc00",
+      "message": "Orange Juice",
+      "mixer": "orange"
+    },
+    "pineappleJuice": {
+      "data": "pineapple-juice",
+      "command": "make_pineapple_juice",
+      "rgb": "00cc00",
+      "message": "Pineapple Juice",
+      "mixer": "orange"
+    }
+  },
+  "pumps": {
+    "grenadine": { "driver": "direct-pin", "pin": 8, "connection": "edison" },
+    "mango": { "driver": "direct-pin", "pin": 9, "connection": "edison" },
+    "orange": { "driver": "direct-pin", "pin": 10, "connection": "edison" },
+    "pineapple": { "driver": "direct-pin", "pin": 11, "connection": "edison" }
+  }
+}

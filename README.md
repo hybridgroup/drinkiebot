@@ -4,16 +4,18 @@ A drink-making robot based on Cylon.js (http://cylonjs.com) that can be built fo
 
 Features:
 
-	* Four pump system
-	* API
+	* Multi-pump system
+	* REST API
 	* Solid PVC construction
 	* RGB LEDs
 	* Optional OpenCV computer vision support
+	* Optional Imgur album uploading
+	* Recipe file in JSON
 
 Drinkiebot requires a single board Linux SoC such as the Intel Edison that provides:
 
 	* 4 GPIO digital outputs
-	* 3 PWM
+	* 3 PWM outputss
 	* 1 i2c port
 
 ## Frame
@@ -30,11 +32,30 @@ Drinkiebot requires a single board Linux SoC such as the Intel Edison that provi
 
 
 ## Circuitry
-The basic circuit uses one Darlington TP120 transistor to control each 12V pumps. A rectifing diode is added to protect the Linux computer from voltage spikes when the pump is shut off. 
+The basic circuit uses one Darlington TP120 transistor to control each 12V pumps. A rectifing diode is added to protect the Linux computer from voltage spikes when the pump is shut off.
 
 Three Darlington TP120 transistors are used to control the RGB LED strip, once each for red, green, and blue are attached to the PWM outputs.
 
 The i2c output is connected to a `jhd1313m1` backlit LED display to show status.
+
+## Software install
+
+You will need to install a bunch of software on the Edison.
+
+Edit add these package repos using `vi /etc/opkg/base-feeds.conf`:
+
+```
+src all     http://iotdk.intel.com/repos/1.1/iotdk/all
+src x86 http://iotdk.intel.com/repos/1.1/iotdk/x86
+src i586    http://iotdk.intel.com/repos/1.1/iotdk/i586
+src/gz edison http://repo.opkg.net/edison/repo/edison
+src/gz core2-32 http://repo.opkg.net/edison/repo/core2-32
+```
+
+```
+opkg update
+opkg install screen git opencv-dev
+```
 
 ## Camera
 You can use the optional support for OpenCV and a web cam. This let's you take "drinkies" aka photos of the humans who have just had a drink made for them by a robot.

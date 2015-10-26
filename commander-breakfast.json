@@ -1,0 +1,71 @@
+{
+  "command_set":{
+    "name": "Drinkiebot",
+    "type": "list",
+    "commands":[
+      {
+        "label": "Mango Pina",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_mango_pina",
+        "params": {}
+      },
+      {
+        "label": "Cinderella",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_cinderella",
+        "params": {}
+      },
+      {
+        "label": "Sunrise",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_sunrise",
+        "params": {}
+      },
+      {
+        "label": "Tropical",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_tropical",
+        "params": {}
+      },
+      {
+        "label": "Orange Juice",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_orange_juice",
+        "params": {}
+      },
+      {
+        "label": "Pineapple Juice",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "make_pineapple_juice",
+        "params": {}
+      },
+      {
+        "label": "Take Photo",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "take_photo",
+        "params": {}
+      },
+      {
+        "label": "Attract Mode",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "attract",
+        "params": {}
+      },
+      {
+        "label": "Cleaning",
+        "robot": "drinkiebot",
+        "device": "",
+        "name": "clean",
+        "params": {}
+      }
+    ]
+  }
+}
