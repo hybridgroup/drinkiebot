@@ -23,14 +23,14 @@ var devices = {
   display: { driver: 'upm-jhd1313m1', connection: 'edison'}
 };
 
-var pumps = require("./" + config.pumps);
+var pumps = require("./" + config.pumps).pumps;
+var totals = {};
 for (pump in pumps) {
   devices[pump] = pumps[pump];
   totals[pumps[pump].data] = 0;
 }
 
 var drinks = require("./" + config.drinks);
-var totals = {};
 
 if (fs.existsSync("totals.json")) {
   totals = JSON.parse(fs.readFileSync("totals.json", { encoding: 'utf8' }));
